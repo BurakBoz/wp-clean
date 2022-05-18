@@ -7,14 +7,22 @@
 
 ### Shell commands:
 ````
+# Download script with wget
+wget --no-check-certificate https://raw.githubusercontent.com/BurakBoz/wp-clean/main/wp-clean.php wp-clean.php
+
+
+# Download script with curl
+curl https://raw.githubusercontent.com/BurakBoz/wp-clean/main/wp-clean.php -O wp-clean.php
+
+
 # bypass warning message
-wp-clean.php force
+php wp-clean.php force
 
 # delete it self after finish
-wp-clean.php delete
+php wp-clean.php delete
 
 # bypass warning and delete itself after finish
-wp-clean.php force delete
+php wp-clean.php force delete
 ````
 
 ### Browser execution:
