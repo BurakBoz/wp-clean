@@ -53,7 +53,7 @@ If you can't able to update your wordpress you can change your $downloadUrl valu
 #### It won't touch your themes / plugins / translations or anything in wp-content folder.
 It will clean / refresh your wordpress core files.
 
-This script can fix hacked, broken, untrusted WordPress installations.
+## This script can fix hacked, broken, untrusted WordPress installations.
 
 Usually hackers change original files or put web shells in wp-admin or wp-includes and also wp-content dirs.
 ### This script only cleans & refreshes WordPress core installation.
