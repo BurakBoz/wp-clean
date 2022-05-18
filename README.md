@@ -3,6 +3,11 @@
 
 #### Dependencies: cURL extension and some passion.
 
+#### Multi Purpose WordPress Cleaner & Refresher
+1. WordPress downloader
+2. WordPress cleaner
+3. Clean install archive generator
+
 #### Usage:
 
 ### Shell commands:
@@ -46,12 +51,6 @@ https://example.com/wp-clean.php?delete=
 # bypass warning and delete itself after finish
 https://example.com/wp-clean.php?force=&delete=
 ````
-
-#### Multi Purpose WordPress Cleaner & Refresher
-1. WordPress downloader
-2. WordPress cleaner
-3. Clean install archive generator
-
 
 ### WARNING! READ THIS! | UYARI! BENI OKU! | WARNUNG! LESEN SIE DIES!
 #### If you don't have any installation it will download, extract and clean latest WordPress for you.
