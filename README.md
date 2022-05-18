@@ -93,4 +93,4 @@ You can use / distribute the clean archive.
 
 It can delete itself after finished the task you can set it by changing $deleteAfterFinish = true;
 
-If you are able to read code, please read before using it. It only ~430 lines.
+If you are able to read code, please read before using it. Its only ~430 lines.
