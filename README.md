@@ -8,22 +8,22 @@
 ### Shell commands:
 ````
 # Download script with wget
-wget --no-check-certificate https://raw.githubusercontent.com/BurakBoz/wp-clean/main/wp-clean.php
+wget --no-check-certificate https://raw.githubusercontent.com/BurakBoz/wp-clean/main/wp-clean.php -O wp-clean.php
 
 # Download script with curl
-curl https://raw.githubusercontent.com/BurakBoz/wp-clean/main/wp-clean.php -O wp-clean.php
+curl -k https://raw.githubusercontent.com/BurakBoz/wp-clean/main/wp-clean.php -o wp-clean.php
 
 # Download with wget and run with self destruct mode
-wget --no-check-certificate https://raw.githubusercontent.com/BurakBoz/wp-clean/main/wp-clean.php && php wp-clean.php delete
+wget --no-check-certificate https://raw.githubusercontent.com/BurakBoz/wp-clean/main/wp-clean.php -O wp-clean.php && php wp-clean.php delete
 
 # Download with wget and run with self destruct and bypass warning mode
-wget --no-check-certificate https://raw.githubusercontent.com/BurakBoz/wp-clean/main/wp-clean.php && php wp-clean.php delete force
+wget --no-check-certificate https://raw.githubusercontent.com/BurakBoz/wp-clean/main/wp-clean.php -O wp-clean.php && php wp-clean.php delete force
 
 # Download with curl and run with self destruct mode
-curl https://raw.githubusercontent.com/BurakBoz/wp-clean/main/wp-clean.php -O wp-clean.php && php wp-clean.php delete
+curl -k https://raw.githubusercontent.com/BurakBoz/wp-clean/main/wp-clean.php -o wp-clean.php && php wp-clean.php delete
 
 # Download with curl and run with self destruct and bypass warning mode
-curl https://raw.githubusercontent.com/BurakBoz/wp-clean/main/wp-clean.php -O wp-clean.php && php wp-clean.php delete force
+curl -k https://raw.githubusercontent.com/BurakBoz/wp-clean/main/wp-clean.php -o wp-clean.php && php wp-clean.php delete force
 
 # bypass warning message
 php wp-clean.php force
