@@ -77,7 +77,7 @@ It will clean / refresh your wordpress core files.
 Usually hackers change original files or put web shells in wp-admin or wp-includes and also wp-content dirs.
 ### This script only cleans & refreshes WordPress core installation.
 
-You have to clean your wp-content folder and themes / plugins / uploads folder by your self!
+You have to clean your wp-content folder and themes / plugins / uploads folders by your self!
 ## It won't touch these files and folders by default:
 wp-content folder .htaccess and wp-config.php file on current dir OR document root
 
