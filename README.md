@@ -1,5 +1,5 @@
 # wp-clean.php
-## WordPress Cleaner | WordPress Refresher | WordPress Downloader
+#### WordPress Cleaner | WordPress Refresher | WordPress Downloader | WordPress Fixer
 
 #### Dependencies: cURL extension and some passion.
 
