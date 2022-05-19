@@ -245,6 +245,11 @@ foreach ($objects as $name => $file)
     }
 }
 
+// File patches
+patchFile($path . "wp-settings.php", function ($src){
+    return str_replace('<?php', '<?php if(!defined("ABSPATH")) exit();', $src); // prevent display errors
+});
+
 // Create index.php for empty directories.
 file_put_contents($path . "wp-content/index.php", $indexSource,FILE_BINARY);
 // Create .htaccess file for routing.
@@ -441,4 +446,14 @@ function sendBuffer($chunk)
     }
     @flush();
     @ob_flush();
+}
+
+function patchFile($file, callable $callback = null)
+{
+    if(file_exists($file) and is_callable($callback))
+    {
+        $src = file_get_contents($file);
+        if($src !== false) return file_put_contents($file, $callback($src), FILE_BINARY);
+    }
+    return false;
 }
