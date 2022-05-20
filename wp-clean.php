@@ -99,24 +99,36 @@ $deleteAfterFinish = false;
 
 // It deletes this files on wordpress.org/latest.zip downloaded archive. Not the ones on production site.
 $deleteFiles      = [
-    "readme.html",
-    "license.txt",
-    "license.commercial.txt",
+    "gpl.txt",
+    "GPL.txt",
+    "GPL.TXT",
     "changelog.txt",
     "changelog.md",
     "changelog",
+    "CHANGELOG",
+    "CHANGELOG.md",
+    "CHANGELOG.MD",
+    "license.txt",
+    "license.commercial.txt",
     "LICENSE",
+    "LICENSE.txt",
     "LICENSE.md",
+    "LICENSE.MD",
+    "readme.html",
+    "readme.txt",
+    "readme.md",
+    "readme",
     "README.md",
+    "README.MD",
     "README",
 ];
 
 // It deletes this folders on wordpress.org/latest.zip downloaded archive. Not the ones on production site.
 $deleteFolders    = [
-    "wp-content/themes",
     "wp-content/mu-plugins",
-    "wp-content/plugins",
     "wp-content/uploads",
+    "wp-content/uploads/" . date("Y"),
+    "wp-content/uploads/" . date("Y/m"),
     "wp-content/languages",
     "wp-content/upgrade",
 ];
@@ -156,8 +168,7 @@ php {$_SERVER["PHP_SELF"]} force
 ");
 }
 sendBuffer("Multi Purpose WordPress Cleaner & Refresher" . PHP_EOL);
-sendBuffer("For more libraries visit https://github.com/BurakBoz" . PHP_EOL);
-sendBuffer("For more tools visit https://gist.github.com/BurakBoz" . PHP_EOL);
+sendBuffer("For more visit https://github.com/BurakBoz and https://gist.github.com/BurakBoz" . PHP_EOL);
 if($deleteAfterFinish)
 {
     sendBuffer("Self destruct mode is active! When this job is finished this file will delete it self." . PHP_EOL);
@@ -199,6 +210,20 @@ if(!file_exists($downloadFileName))
         exit();
     }
 }
+
+// Delete defaults
+@unlink($path . "wp-content/plugins/hello.php");
+rrmdir($path . "wp-content/plugins/akismet/");
+rrmdir($path . "wp-content/themes/twentytwentythree/");
+rrmdir($path . "wp-content/themes/twentytwentytwo/");
+rrmdir($path . "wp-content/themes/twentytwentyone/");
+rrmdir($path . "wp-content/themes/twentytwenty/");
+
+// Download plugins
+downloadPluginOrTheme($path . "wp-content" . DIRECTORY_SEPARATOR . "plugins" . DIRECTORY_SEPARATOR, arg("plugins"));
+
+// Download themes
+downloadPluginOrTheme($path . "wp-content" . DIRECTORY_SEPARATOR . "themes" . DIRECTORY_SEPARATOR, arg("themes"), "theme");
 
 $deleteFolders = array_unique(array_filter(array_map(function ($item) use ($path) {
     $path = rtrim($path,"/") . DIRECTORY_SEPARATOR . str_replace("/", DIRECTORY_SEPARATOR, $item);
@@ -252,6 +277,8 @@ patchFile($path . "wp-settings.php", function ($src){
 
 // Create index.php for empty directories.
 file_put_contents($path . "wp-content/index.php", $indexSource,FILE_BINARY);
+file_put_contents($path . "wp-content/themes/index.php", $indexSource,FILE_BINARY);
+file_put_contents($path . "wp-content/plugins/index.php", $indexSource,FILE_BINARY);
 // Create .htaccess file for routing.
 if(file_put_contents($path . ".htaccess", <<<HTACCESS
 # BEGIN WordPress
@@ -366,6 +393,7 @@ sendBuffer("Ready to go.");
 
 function rrmdir($dir)
 {
+    if (!is_dir($dir)) return;
     $files = new RecursiveIteratorIterator(
         new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS),
         RecursiveIteratorIterator::CHILD_FIRST
@@ -408,15 +436,23 @@ function curlSave($url, $file, array $options = [])
     $defaultOptions = [
         CURLOPT_URL => $url,
         CURLOPT_FILE => $fp,
+        CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_USERAGENT => "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.2661.102 Safari/537.36",
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_SSL_VERIFYHOST => false,
     ];
     curl_setopt_array($ch,array_replace($defaultOptions,$options));
-    curl_exec($ch);
+    $status = curl_exec($ch);
+    $hs = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     fclose($fp);
-    return true;
+    clearstatcache(true, $file);
+    clearstatcache(false, $file);
+    if(filesize($file)<1)
+    {
+        @unlink($file);
+    }
+    return $status == true && in_array($hs,[200,301,302]);
 }
 
 function extractArchive($file, $path = __DIR__, $files = null)
@@ -424,7 +460,7 @@ function extractArchive($file, $path = __DIR__, $files = null)
     try
     {
         $phar = new PharData($file);
-        $phar->extractTo(__DIR__, $files, true); // extract all files and overwrite
+        $phar->extractTo($path, $files, true); // extract all files and overwrite
         return true;
     }
     catch (Exception $e)
@@ -456,4 +492,67 @@ function patchFile($file, callable $callback = null)
         if($src !== false) return file_put_contents($file, $callback($src), FILE_BINARY);
     }
     return false;
+}
+
+function downloadPluginOrTheme($path, $name, $type = "plugin", $storeUrl = "https://downloads.wordpress.org/%s/%s.zip")
+{
+    if (empty($name))
+    {
+        return;
+    }
+    if(!in_array($type,["plugin", "theme"]))
+    {
+        return;
+    }
+    sendBuffer("Downloading {$type}s.." . PHP_EOL);
+    $path = rtrim($path,"/\\") . DIRECTORY_SEPARATOR;
+    if(!is_dir($path)) @mkdir($path, 0755, true);
+    $names = explode(",",$name);
+    $names = array_filter(array_map('trim',!is_array($names) ? [$name] : $names));
+    foreach ($names as $name)
+    {
+        $downloadUrl = sprintf($storeUrl, $type, $name);
+        $filename = basename($downloadUrl);
+        $archiveFile = $path . $filename;
+        sendBuffer("--------------" . PHP_EOL);
+        sendBuffer("$type: $name downloading from $downloadUrl to $archiveFile" . PHP_EOL);
+        if(curlSave($downloadUrl, $archiveFile))
+        {
+            $archiveFile = realpath($archiveFile);
+            if($archiveFile === false || filesize($archiveFile)<1)
+            {
+                sendBuffer("$type: $name ($downloadUrl) download error! Skipping..");
+                continue;
+            }
+            sendBuffer("Download complete. Extracting..." . PHP_EOL);
+            if(extractArchive($archiveFile, $path))
+            {
+                sendBuffer("Extraction complete. Deleting file.." . PHP_EOL);
+                rrmdir(__DIR__ . "/wp-content/{$type}s/$name/");
+            }
+        }
+        else
+        {
+            sendBuffer("Download error! Skipping $name $type.." . PHP_EOL);
+        }
+        if(@unlink($archiveFile))
+        {
+            sendBuffer("$filename is deleted." . PHP_EOL);
+        }
+    }
+    sendBuffer("--------------" . PHP_EOL);
+}
+
+function arg($name)
+{
+    global $argv;
+    $argv = array_map('trim',!is_array($argv) ? [] : $argv);
+    foreach ($argv as $arg)
+    {
+        if(preg_match('/^'.preg_quote($name, "/").'[ =:](.*?)$/is', $arg, $matches))
+        {
+            return trim($matches[1],"\"'");
+        }
+    }
+    return isset($_GET[$name]) ? $_GET[$name] : null;
 }
