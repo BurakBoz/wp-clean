@@ -5,10 +5,12 @@
 
 #### Multi Purpose WordPress Cleaner & Refresher
 1. WordPress downloader
-2. WordPress cleaner
-3. WordPress refresher
-4. WordPress fixer
-5. Clean install archive generator
+2. WordPress plugin downloader
+3. WordPress theme downloader
+4. WordPress cleaner
+5. WordPress refresher
+6. WordPress fixer
+7. Clean install archive generator
 
 #### Usage:
 
