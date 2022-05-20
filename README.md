@@ -42,6 +42,15 @@ php wp-clean.php delete
 
 # bypass warning and delete itself after finish
 php wp-clean.php force delete
+
+# install plugins (do not use any space here.)
+php wp-clean.php plugins="akismet,litespeed-cache"
+
+# install themes (do not use any space here.)
+php wp-clean.php themes="astra,twentytwentytwo"
+
+# Complex example
+php wp-clean.php force delete plugins="akismet,litespeed-cache" themes="astra,twentytwentytwo"
 ````
 
 ### Browser execution:
@@ -54,6 +63,12 @@ https://example.com/wp-clean.php?delete=
 
 # bypass warning and delete itself after finish
 https://example.com/wp-clean.php?force=&delete=
+
+# install plugins (do not use any space here.)
+https://example.com/wp-clean.php?plugins=akismet,litespeed-cache
+
+# install themes (do not use any space here.)
+https://example.com/wp-clean.php?themes=astra,twentytwentytwo
 ````
 
 ### WARNING! READ THIS! | UYARI! BENI OKU! | WARNUNG! LESEN SIE DIES!
@@ -61,7 +76,7 @@ https://example.com/wp-clean.php?force=&delete=
 
 It deletes all default themes, plugins, translations files in latest.zip file by Default.
 
-This means you have to upload your own themes, plugins if you are using for clean install.
+This means you have to upload (or choose with param) your own themes, plugins if you are using for clean install.
 
 Of course you can configure this by changing $deleteFolders list.
 
@@ -78,6 +93,9 @@ It will clean / refresh your wordpress core files.
 
 Usually hackers change original files or put web shells in wp-admin or wp-includes and also wp-content dirs.
 ### This script only cleans & refreshes WordPress core installation.
+
+It can clean plugins and themes when you select plugins="plugin-name" and themes="theme-name" parameters. 
+But becareful it will delete the original directories on your wp-content/plugins/plugin-name and wp-content/themes/theme-name
 
 You have to clean your wp-content folder and themes / plugins / uploads folders by your self!
 ## It won't touch these files and folders by default:
