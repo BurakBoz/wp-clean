@@ -121,6 +121,9 @@ $deleteFiles      = [
     "README.md",
     "README.MD",
     "README",
+    ".DS_Store",
+    "Thumbs.db",
+    "thumbs.db",
 ];
 
 // It deletes this folders on wordpress.org/latest.zip downloaded archive. Not the ones on production site.
