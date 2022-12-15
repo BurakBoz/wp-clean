@@ -114,5 +114,3 @@ It won't create clean archive by default you can enable by setting $repack = tru
 You can use / distribute the clean archive.
 
 It can delete itself after finished the task you can set it by changing $deleteAfterFinish = true;
-
-If you are able to read code, please read before using it. Its only ~430 lines.
